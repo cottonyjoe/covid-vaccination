@@ -1,5 +1,5 @@
 [
-{"Name": "Galway Racecourse", "Latitude": "53.298810877564875", "Longitude": "-8.997003657335881"}
-{"Name": "City Hall Cork", "Latitude": "51.89742637092438", "Longitude": "-8.465763459121026"}
+{"Name": "Galway Racecourse", "Latitude": "53.298810877564875", "Longitude": "-8.997003657335881"},
+{"Name": "City Hall Cork", "Latitude": "51.89742637092438", "Longitude": "-8.465763459121026"},
 {"Name": "Citywest Convention Centre Dublin", "Latitude": "53.28603418885669", "Longitude": "-6.4444477725802285"}
 ]

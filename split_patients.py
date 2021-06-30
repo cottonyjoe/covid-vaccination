@@ -38,14 +38,15 @@ def get_closest_center(customer, center_data):
 # Main function
 def main():
     # Gets customer data
-    data = get_data(input_file)
+    data = get_data(file=input_file)
     # Gets center list
-    center_data = get_data(center_list)
+    center_data = get_data(file=center_list)
 
     # Sorts data by priority
     sorted_data = sort_by_key(data, sorting_key='Age', is_reversed=True)
 
     # Splits individuals by center
+    grouped_result_list = []
     # for each customer
     for customer in sorted_data:
         # get closest center
@@ -55,7 +56,7 @@ def main():
     # Changes to JSON
 
     # Returns result
-    return
+    return json.dumps(grouped_result_list)
 
 if __name__ == "__main__":
     # execute only if run as a script
