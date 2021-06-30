@@ -6,6 +6,11 @@ import split_patients as sp
 
 class TestStringMethods(unittest.TestCase):
 
+    people = []
+    people.append({"Name": "Neoma Leong","Age": 56,"Latitude": "54.88775482346","Longitude": "-8.167787110571897" })
+    people.append({"Name": "Ezequiel Hepfer","Age": 69,"Latitude": "54.04308476487112","Longitude": "-7.63487375893224" })
+    people.append({"Name": "Lorri Currey","Age": 25,"Latitude": "54.13644761914938","Longitude": "-9.48968906074299" })
+
     # Test input file reading function
     def test_read_file(self):
         pass
@@ -14,9 +19,36 @@ class TestStringMethods(unittest.TestCase):
     def test_get_json(self):
         pass
 
-    # Test list is sorted by age descreasing
-    def test_sort_by_age(self):
-        pass
+    # Test list is sorted by age descreasing (default)
+    def test_sort_by_age_default(self):
+        res = sp.sort_by_key(self.people)
+        sorted_people = []
+        sorted_people.append({"Name": "Ezequiel Hepfer","Age": 69,"Latitude": "54.04308476487112","Longitude": "-7.63487375893224" })
+        sorted_people.append({"Name": "Neoma Leong","Age": 56,"Latitude": "54.88775482346","Longitude": "-8.167787110571897" })
+        sorted_people.append({"Name": "Lorri Currey","Age": 25,"Latitude": "54.13644761914938","Longitude": "-9.48968906074299" })
+        self.assertEqual(res, sorted_people)
+        self.assertNotEqual(res, self.people)
+
+    # Test list is sorted by age increasing
+    def test_sort_by_age_incresing(self):
+        res = sp.sort_by_key(self.people, is_reversed=False)
+        sorted_people = []
+        sorted_people.append({"Name": "Lorri Currey","Age": 25,"Latitude": "54.13644761914938","Longitude": "-9.48968906074299" })
+        sorted_people.append({"Name": "Neoma Leong","Age": 56,"Latitude": "54.88775482346","Longitude": "-8.167787110571897" })
+        sorted_people.append({"Name": "Ezequiel Hepfer","Age": 69,"Latitude": "54.04308476487112","Longitude": "-7.63487375893224" })
+        self.assertEqual(res, sorted_people)
+        self.assertNotEqual(res, self.people)
+
+    # Test list is sorted by name descreasing
+    def test_sort_by_name(self):
+        res = sp.sort_by_key(self.people, sorting_key='Name')
+        sorted_people = []
+        sorted_people.append({"Name": "Neoma Leong","Age": 56,"Latitude": "54.88775482346","Longitude": "-8.167787110571897" })
+        sorted_people.append({"Name": "Lorri Currey","Age": 25,"Latitude": "54.13644761914938","Longitude": "-9.48968906074299" })
+        sorted_people.append({"Name": "Ezequiel Hepfer","Age": 69,"Latitude": "54.04308476487112","Longitude": "-7.63487375893224" })
+        self.assertEqual(res, sorted_people)
+        self.assertNotEqual(res, self.people)
+
 
     # Test distance calculation between 2 GPS coordinates
     def test_distance_calculation(self):
