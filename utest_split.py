@@ -3,6 +3,7 @@
 
 import unittest
 import split_patients as sp
+import json
 
 class TestStringMethods(unittest.TestCase):
 
@@ -11,15 +12,14 @@ class TestStringMethods(unittest.TestCase):
     people.append({"Name": "Ezequiel Hepfer","Age": 69,"Latitude": "54.04308476487112","Longitude": "-7.63487375893224" })
     people.append({"Name": "Lorri Currey","Age": 25,"Latitude": "54.13644761914938","Longitude": "-9.48968906074299" })
 
-    # Test input file reading function
-    def test_read_file(self):
-        pass
+    # Tests data is read from JSON file
+    def test_get_data(self):
+        with open('test.txt', 'w') as outfile:
+            json.dump(self.people, outfile)
+        res = sp.get_data(file='test.txt')
+        self.assertEqual(res, self.people)
 
-    # Test not JSON file raises an error
-    def test_get_json(self):
-        pass
-
-    # Test list is sorted by age descreasing (default)
+    # Tests list is sorted by age decreasing (default)
     def test_sort_by_age_default(self):
         res = sp.sort_by_key(self.people)
         sorted_people = []
@@ -29,8 +29,8 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(res, sorted_people)
         self.assertNotEqual(res, self.people)
 
-    # Test list is sorted by age increasing
-    def test_sort_by_age_incresing(self):
+    # Tests list is sorted by age increasing
+    def test_sort_by_age_increasing(self):
         res = sp.sort_by_key(self.people, is_reversed=False)
         sorted_people = []
         sorted_people.append({"Name": "Lorri Currey","Age": 25,"Latitude": "54.13644761914938","Longitude": "-9.48968906074299" })
@@ -39,7 +39,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(res, sorted_people)
         self.assertNotEqual(res, self.people)
 
-    # Test list is sorted by name descreasing
+    # Tests list is sorted by name decreasing
     def test_sort_by_name(self):
         res = sp.sort_by_key(self.people, sorting_key='Name')
         sorted_people = []
@@ -50,15 +50,15 @@ class TestStringMethods(unittest.TestCase):
         self.assertNotEqual(res, self.people)
 
 
-    # Test distance calculation between 2 GPS coordinates
+    # Tests distance calculation between 2 GPS coordinates
     def test_distance_calculation(self):
         pass
 
-    # Test customers are grouped with relevant center
+    # Tests customers are grouped with relevant center
     def test_center_filtering(self):
         pass
 
-    # Test output is in JSON
+    # Tests output is in JSON
     def test_output(self):
         pass
 
