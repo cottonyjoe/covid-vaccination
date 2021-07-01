@@ -33,9 +33,10 @@ def get_data(file=input_file):
 def initiate_response(center_data):
     grouped_result_list = []
     for center in center_data:
-        grouped_result_list.append({"Name": center['Name'], "Customers":[]})
+        grouped_result_list.append({"Name": center['Name'], "Customers": []})
 
     return grouped_result_list
+
 
 # Sorts a list of dict objects according to an optional key; this can be
 # reversed.
@@ -127,7 +128,7 @@ def dispatch_customer(customer, vacc_center, grouped_result_list):
         if d["Name"] == vacc_center), None)
     grouped_result_list[center_index]['Customers'].append(customer)
 
-    return 
+    return
 
 
 # Main function
