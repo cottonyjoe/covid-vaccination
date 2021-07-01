@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
 
-import os
+import os, io
 import unittest
 import split_patients as sp
 import json
@@ -16,11 +16,11 @@ class TestStringMethods(unittest.TestCase):
 
     # Tests data is read from JSON file
     def test_get_data(self):
-        with open('test.txt', 'w') as outfile:
+        with open('tests/test.txt', 'w') as outfile:
             json.dump(self.people, outfile)
-        res = sp.get_data(file='test.txt')
+        res = sp.get_data(file='tests/test.txt')
         self.assertEqual(res, self.people)
-        os.remove("test.txt")
+        os.remove("tests/test.txt")
 
     # Test result initialization
     def test_initiate_response(self):
@@ -86,12 +86,58 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(res, "Galway Racecourse")
 
     # Tests customers are grouped with relevant center
-    def test_center_filtering(self):
-        pass
+    def test_dispatch_customer(self):
+        grouped_list = [\
+{"Name": "City Hall Cork", "Customers":[]},\
+{"Name": "Citywest Convention Centre Dublin", "Customers":[]},\
+{"Name": "Galway Racecourse", "Customers":[]}\
+]
+        expected_grouped_list = [\
+{"Name": "City Hall Cork", "Customers":[]},\
+{"Name": "Citywest Convention Centre Dublin", "Customers":[]},\
+{"Name": "Galway Racecourse", "Customers":[{"Name": "Neoma Leong", "Age": 56, "Latitude": "54.88775482346", "Longitude": "-8.167787110571897"}]}\
+]
+        centers = []
+        centers.append({"Name": "City Hall Cork", "Latitude": "51.89742637092438", "Longitude": "-8.465763459121026"})
+        centers.append({"Name": "Citywest Convention Centre Dublin", "Latitude": "53.28603418885669", "Longitude": "-6.4444477725802285"})
+        centers.append({"Name": "Galway Racecourse", "Latitude": "53.298810877564875", "Longitude": "-8.997003657335881"})
+        customer = {"Name": "Neoma Leong", "Age": 56, "Latitude": "54.88775482346", "Longitude": "-8.167787110571897"}
+        sp.dispatch_customer(customer, "Galway Racecourse", grouped_list)
+        self.assertEqual(grouped_list, expected_grouped_list)
+
+    # Tests customers are grouped with relevant center
+    def test_dispatch_customer_ordered(self):
+        grouped_list = [\
+{"Name": "City Hall Cork", "Customers":[]},\
+{"Name": "Citywest Convention Centre Dublin", "Customers":[]},\
+{"Name": "Galway Racecourse", "Customers":[]}\
+]
+        expected_grouped_list = [\
+{"Name": "City Hall Cork", "Customers":[]},\
+{"Name": "Citywest Convention Centre Dublin", "Customers":[]},\
+{"Name": "Galway Racecourse", "Customers":[\
+    {"Name": "Ezequiel Hepfer", "Age": 69, "Latitude": "54.04308476487112", "Longitude": "-7.63487375893224"},\
+    {"Name": "Neoma Leong", "Age": 56, "Latitude": "54.88775482346", "Longitude": "-8.167787110571897"}]}\
+]
+        centers = []
+        centers.append({"Name": "City Hall Cork", "Latitude": "51.89742637092438", "Longitude": "-8.465763459121026"})
+        centers.append({"Name": "Citywest Convention Centre Dublin", "Latitude": "53.28603418885669", "Longitude": "-6.4444477725802285"})
+        centers.append({"Name": "Galway Racecourse", "Latitude": "53.298810877564875", "Longitude": "-8.997003657335881"})
+        customer = {"Name": "Ezequiel Hepfer", "Age": 69, "Latitude": "54.04308476487112", "Longitude": "-7.63487375893224"}
+        customer2 = {"Name": "Neoma Leong", "Age": 56, "Latitude": "54.88775482346", "Longitude": "-8.167787110571897"}
+        sp.dispatch_customer(customer, "Galway Racecourse", grouped_list)
+        sp.dispatch_customer(customer2, "Galway Racecourse", grouped_list)
+        self.assertEqual(grouped_list, expected_grouped_list)
 
     # Tests output is in JSON
     def test_output(self):
-        pass
+        res = sp.main()
+        res = json.loads(res)
+        f = open('tests/expected_output.txt')
+        expected_res = json.load(f)
+        f.close()
+        self.assertEqual(res, expected_res)
+
 
 if __name__ == '__main__':
     unittest.main()
