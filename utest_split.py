@@ -22,6 +22,20 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(res, self.people)
         os.remove("test.txt")
 
+    # Test result initialization
+    def test_initiate_response(self):
+        centers = []
+        centers.append({"Name": "City Hall Cork", "Latitude": "51.89742637092438", "Longitude": "-8.465763459121026"})
+        centers.append({"Name": "Citywest Convention Centre Dublin", "Latitude": "53.28603418885669", "Longitude": "-6.4444477725802285"})
+        centers.append({"Name": "Galway Racecourse", "Latitude": "53.298810877564875", "Longitude": "-8.997003657335881"})
+        expected_result_list = [\
+{"Name": "City Hall Cork", "Customers":[]},\
+{"Name": "Citywest Convention Centre Dublin", "Customers":[]},\
+{"Name": "Galway Racecourse", "Customers":[]}\
+]
+        res = sp.initiate_response(centers)
+        self.assertEqual(res, expected_result_list)
+
     # Tests list is sorted by age decreasing (default)
     def test_sort_by_age_default(self):
         res = sp.sort_by_key(self.people)

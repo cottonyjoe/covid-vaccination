@@ -27,6 +27,16 @@ def get_data(file=input_file):
     return data
 
 
+# Initializes the final result shape
+# @param list List of dict of vaccination centers
+# @return list A list of dict per center
+def initiate_response(center_data):
+    grouped_result_list = []
+    for center in center_data:
+        grouped_result_list.append({"Name": center['Name'], "Customers":[]})
+
+    return grouped_result_list
+
 # Sorts a list of dict objects according to an optional key; this can be
 # reversed.
 # @param list A list of dict objects to sort.
@@ -115,7 +125,9 @@ def dispatch_customer(customer, vacc_center, grouped_result_list):
     center_index = next((
         index for (index, d) in enumerate(grouped_result_list)
         if d["Name"] == vacc_center), None)
-    pass
+    grouped_result_list[center_index]['Customers'].append(customer)
+
+    return 
 
 
 # Main function
@@ -125,22 +137,24 @@ def main():
     # Gets center list
     center_data = get_data(file=center_list)
 
+    # Initiates result
+    grouped_result_list = initiate_response(center_data)
+
     # Sorts data by priority
     sorted_data = sort_by_key(data, sorting_key='Age', is_reversed=True)
 
     # Splits individuals by center
-    grouped_result_list = []
     # for each customer
     for customer in sorted_data:
         # get closest center
         vacc_center = get_closest_center(customer, center_data)
         # adds him/her to relevant group
-        grouped_result_list = dispatch_customer(
-            customer, vacc_center, grouped_result_list)
+        dispatch_customer(customer, vacc_center, grouped_result_list)
 
     # Returns result as JSON
     return json.dumps(grouped_result_list)
 
 if __name__ == "__main__":
     # execute only if run as a script
-    main()
+    res = main()
+    print(res)
