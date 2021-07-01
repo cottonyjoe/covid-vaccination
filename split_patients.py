@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 import json
-import math
+from math import sin, cos, sqrt, atan2, asin, radians
 
 # This script will read a list of patients from a JSON file and split them into
 # groups according to their nearest vaccination center and sorted by age.
@@ -38,17 +38,65 @@ def sort_by_key(data, sorting_key='Age', is_reversed=True):
     return sorted(data, key=lambda k: k[sorting_key], reverse=is_reversed)
 
 
-def computation_formula(lat1, long1, lat2, long2):
-    res = 2 * math.asin(math.sqrt(math.pow(, 2)))
-    return
+# Computes distance between 2 GPS coordinates at the surface og the Earth.
+# Formula taken from https://en.wikipedia.org/wiki/Great-circle_distance
+# @param float GPS latitude of the source
+# @param float GPS longitude of the source
+# @param float GPS latitude of the destination
+# @param float GPS longitude of the destination
+# @return float Distance in km
+def compute_distance(lat1, lon1, lat2, lon2):
+    # Rough estimation of Earth's radius
+    R = 6373.0
+
+    # Converts all coodinates to radians
+    r_lat1 = radians(lat1)
+    r_lon1 = radians(lon1)
+    r_lat2 = radians(lat2)
+    r_lon2 = radians(lon2)
+
+    # Calculate deltas
+    dlon = r_lon2 - r_lon1
+    dlat = r_lat2 - r_lat1
+
+    # Implement actual formula
+    a = sin(dlat / 2)**2 + cos(r_lat1) * cos(r_lat2) * sin(dlon / 2)**2
+    c = 2 * asin(sqrt(a))
+    distance = R * c
+
+    return distance
 
 
 # Gets the closest vaccination center from a customer
 # @param dict Customer object with Name, Age, Latitude and Longitude data.
 # @param dict Vaccination centers list of dict with Name, Latitude and
 #             Longitude data.
+# @return string Name of the closest vaccination center from the customer
 def get_closest_center(customer, center_data):
-    pass
+    # Initiates few parameters
+    nearest = 40000 # Very far center
+    name = ''
+    # Customer coordinates
+    lat1 = customer['Latitude']
+    if isinstance(lat1, str): lat1 = float(lat1)
+    lon1 = customer['Longitude']
+    if isinstance(lon1, str): lon1 = float(lon1)
+
+    # For each vaccination center, find the closest from the customer
+    for center in center_data:
+        # Gets latitude and longitude from obj and convert them to float
+        # if necessary.
+        lat2 = center['Latitude']
+        if isinstance(lat2, str): lat2 = float(lat2)
+        lon2 = center['Longitude']
+        if isinstance(lon2, str): lon2 = float(lon2) 
+
+        distance = compute_distance(lat1, lon1, lat2, lon2)
+        if distance < nearest:
+            nearest = distance
+            name = center['Name']
+
+    return name
 
 
 # Main function

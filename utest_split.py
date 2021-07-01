@@ -52,7 +52,22 @@ class TestStringMethods(unittest.TestCase):
 
     # Tests distance calculation between 2 GPS coordinates
     def test_distance_calculation(self):
-        pass
+        lat1 = 53.297810877564875
+        lon1 = -8.997003657335881
+        lat2 = 53.09402405506328
+        lon2 = -8.020019531250002
+        res = round(sp.compute_distance(lat1, lon1, lat2, lon2), 3)
+        self.assertEqual(res, 68.935)
+
+    # Test closest center is defined
+    def test_get_closest_center(self):
+        centers = []
+        centers.append({"Name": "City Hall Cork", "Latitude": "51.89742637092438", "Longitude": "-8.465763459121026"})
+        centers.append({"Name": "Citywest Convention Centre Dublin", "Latitude": "53.28603418885669", "Longitude": "-6.4444477725802285"})
+        centers.append({"Name": "Galway Racecourse", "Latitude": "53.298810877564875", "Longitude": "-8.997003657335881"})
+        customer = {"Name": "Neoma Leong", "Age": 56, "Latitude": "54.88775482346", "Longitude": "-8.167787110571897"}
+        res = sp.get_closest_center(customer, centers)
+        self.assertEqual(res, "Galway Racecourse")
 
     # Tests customers are grouped with relevant center
     def test_center_filtering(self):
