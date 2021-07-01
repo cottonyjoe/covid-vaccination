@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
 
+import os
 import unittest
 import split_patients as sp
 import json
@@ -19,6 +20,7 @@ class TestStringMethods(unittest.TestCase):
             json.dump(self.people, outfile)
         res = sp.get_data(file='test.txt')
         self.assertEqual(res, self.people)
+        os.remove("test.txt")
 
     # Tests list is sorted by age decreasing (default)
     def test_sort_by_age_default(self):

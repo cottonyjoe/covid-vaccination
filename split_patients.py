@@ -12,8 +12,8 @@ input_file = 'People.txt'
 center_list = 'centerList.txt'
 
 
-# Read data from file
-# @param string File name; optional, default is input_file global var value
+# Read data from file.
+# @param string File name; optional, default is input_file global var value.
 # @return list The list of customers as a list of dict objects.
 def get_data(file=input_file):
     # Opening JSON file
@@ -40,11 +40,11 @@ def sort_by_key(data, sorting_key='Age', is_reversed=True):
 
 # Computes distance between 2 GPS coordinates at the surface og the Earth.
 # Formula taken from https://en.wikipedia.org/wiki/Great-circle_distance
-# @param float GPS latitude of the source
-# @param float GPS longitude of the source
-# @param float GPS latitude of the destination
-# @param float GPS longitude of the destination
-# @return float Distance in km
+# @param float GPS latitude of the source.
+# @param float GPS longitude of the source.
+# @param float GPS latitude of the destination.
+# @param float GPS longitude of the destination.
+# @return float Distance in km.
 def compute_distance(lat1, lon1, lat2, lon2):
     # Rough estimation of Earth's radius
     R = 6373.0
@@ -67,36 +67,55 @@ def compute_distance(lat1, lon1, lat2, lon2):
     return distance
 
 
-# Gets the closest vaccination center from a customer
+# Gets the closest vaccination center from a customer.
 # @param dict Customer object with Name, Age, Latitude and Longitude data.
 # @param dict Vaccination centers list of dict with Name, Latitude and
 #             Longitude data.
-# @return string Name of the closest vaccination center from the customer
+# @return string Name of the closest vaccination center from the customer.
 def get_closest_center(customer, center_data):
     # Initiates few parameters
-    nearest = 40000 # Very far center
+    nearest = 40000  # Very far center
     name = ''
     # Customer coordinates
     lat1 = customer['Latitude']
-    if isinstance(lat1, str): lat1 = float(lat1)
+    if isinstance(lat1, str):
+        lat1 = float(lat1)
     lon1 = customer['Longitude']
-    if isinstance(lon1, str): lon1 = float(lon1)
+    if isinstance(lon1, str):
+        lon1 = float(lon1)
 
     # For each vaccination center, find the closest from the customer
     for center in center_data:
         # Gets latitude and longitude from obj and convert them to float
         # if necessary.
         lat2 = center['Latitude']
-        if isinstance(lat2, str): lat2 = float(lat2)
+        if isinstance(lat2, str):
+            lat2 = float(lat2)
         lon2 = center['Longitude']
-        if isinstance(lon2, str): lon2 = float(lon2) 
+        if isinstance(lon2, str):
+            lon2 = float(lon2)
 
+        # Compute distance between GPS locations
         distance = compute_distance(lat1, lon1, lat2, lon2)
+
+        # If closer, store it
         if distance < nearest:
             nearest = distance
             name = center['Name']
 
     return name
+
+
+# Fills the result array with customers. Adds customer to its relevant
+# vaccination center.
+# @param dict Customer to add.
+# @param string Vaccination to link with customer.
+# @param list List of center and ordered customer.
+def dispatch_customer(customer, vacc_center, grouped_result_list):
+    center_index = next((
+        index for (index, d) in enumerate(grouped_result_list)
+        if d["Name"] == vacc_center), None)
+    pass
 
 
 # Main function
@@ -116,10 +135,10 @@ def main():
         # get closest center
         vacc_center = get_closest_center(customer, center_data)
         # adds him/her to relevant group
+        grouped_result_list = dispatch_customer(
+            customer, vacc_center, grouped_result_list)
 
-    # Changes to JSON
-
-    # Returns result
+    # Returns result as JSON
     return json.dumps(grouped_result_list)
 
 if __name__ == "__main__":
