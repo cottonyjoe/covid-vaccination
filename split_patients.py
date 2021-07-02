@@ -132,7 +132,7 @@ def dispatch_customer(customer, vacc_center, grouped_result_list):
 
 
 # Main function
-def main():
+def split_patients():
     # Gets customer data
     data = get_data(file=input_file)
     # Gets center list
@@ -157,5 +157,5 @@ def main():
 
 if __name__ == "__main__":
     # execute only if run as a script
-    res = main()
+    res = split_patients()
     print(res)

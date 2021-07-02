@@ -131,7 +131,7 @@ class TestStringMethods(unittest.TestCase):
 
     # Tests output is in JSON
     def test_output(self):
-        res = sp.main()
+        res = sp.split_patients()
         res = json.loads(res)
         f = open('tests/expected_output.txt')
         expected_res = json.load(f)
