@@ -55,4 +55,4 @@ Those tests can be run:
 
 ## Disclaimer
 
-This script can widely be improved in term of error management. Any issue in input files will cause the script to crash with ugly error message.
+This script can widely be improved in terms of error management. Any issue in input files will cause the script to crash with ugly error message.
